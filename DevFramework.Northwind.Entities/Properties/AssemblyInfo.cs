@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("ClDevFramework.Northwind.Entities")]
+[assembly: AssemblyTitle("DevFramework.Northwind.Entities")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("ClDevFramework.Northwind.Entities")]
+[assembly: AssemblyProduct("DevFramework.Northwind.Entities")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("705b47a8-ecb3-478f-8f6f-b7be7d1d2343")]
+[assembly: Guid("70636a14-054c-435e-8511-7808b3754ee3")]
 
 // Version information for an assembly consists of the following four values:
 //
