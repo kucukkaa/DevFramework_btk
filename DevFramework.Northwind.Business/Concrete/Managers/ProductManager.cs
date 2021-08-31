@@ -30,12 +30,15 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
 
         [FluentValidationAspect(typeof(ProductValidator))]
         [CacheRemoveAspect(typeof(MemoryCacheManager))]
+        [LogAspect(typeof(DatabaseLogger))]
+        [LogAspect(typeof(FileLogger))]
         public Product Add(Product product)
         {
             return _productDal.Add(product);
         }
 
         [CacheAspect(typeof(MemoryCacheManager))]
+        [LogAspect(typeof(FileLogger))]
         [LogAspect(typeof(DatabaseLogger))]
         public List<Product> GetAll()
         {

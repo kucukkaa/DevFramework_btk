@@ -41,11 +41,30 @@ namespace DevFramework.Core.Aspects.Postsharp.LogAspects
                 return;
             }
 
-            var logParameters = args.Method.GetParameters().Select((t, i) => new LogParameter {
-                Name = t.Name,
-                Type = t.ParameterType.Name,
-            Value = args.Arguments.GetArgument(i)
-            });
+            try
+            {
+                var logParameters = args.Method.GetParameters().Select((t, i) => new LogParameter
+                {
+                    Name = t.Name,
+                    Type = t.ParameterType.Name,
+                    Value = args.Arguments.GetArgument(i)
+                });
+                
+                var logDetail = new LogDetail
+                {
+                    FullName = args.Method.DeclaringType == null ? null : args.Method.DeclaringType.Name,
+                    MethodName = args.Method.Name,
+                    Parameters = logParameters.ToList()
+                };
+
+                _loggerService.Info(logDetail);
+            }
+            catch (Exception)
+            {
+                
+            }
+            
+            
         }
 
     }
