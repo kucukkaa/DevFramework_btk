@@ -29,7 +29,7 @@ namespace DevFramework.Northwind.MvcWebUI.Controllers
 
         public string Add()
         {
-            _productService.Add(new Product(){ CategoryId =1, ProductName = "GSM", QuantityPerUnit="1", UnitPrice=21});
+            _productService.Add(new Product(){ CategoryId =1, ProductName = "GSM", QuantityPerUnit="1", UnitPrice=10});
             return "added";
             
         }

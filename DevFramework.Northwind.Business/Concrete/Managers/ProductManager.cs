@@ -1,4 +1,5 @@
 ﻿using DevFramework.Core.Aspects.Postsharp;
+using DevFramework.Core.Aspects.Postsharp.AuthhorizationAspects;
 using DevFramework.Core.Aspects.Postsharp.CacheAspect;
 using DevFramework.Core.Aspects.Postsharp.LogAspects;
 using DevFramework.Core.Aspects.Postsharp.TransactionAspects;
@@ -14,11 +15,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 
 namespace DevFramework.Northwind.Business.Concrete.Managers
 {
+    
     public class ProductManager : IProductService
     {
         private IProductDal _productDal;
@@ -30,35 +33,34 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
 
         [FluentValidationAspect(typeof(ProductValidator))]
         [CacheRemoveAspect(typeof(MemoryCacheManager))]
-        [LogAspect(typeof(DatabaseLogger))]
-        [LogAspect(typeof(FileLogger))]
         public Product Add(Product product)
         {
             return _productDal.Add(product);
         }
 
         [CacheAspect(typeof(MemoryCacheManager))]
-        [LogAspect(typeof(FileLogger))]
-        [LogAspect(typeof(DatabaseLogger))]
+        [SucuredOperation(Roles="Admin")]
         public List<Product> GetAll()
         {
             return _productDal.GetList();
         }
 
+        [CacheAspect(typeof(MemoryCacheManager))]
         public Product GetById(int ProductId)
         {
             return _productDal.Get(p => p.ProductId == ProductId);
         }
 
-        [TransactionScopeAspect]
-        public void TransactionalOperation(Product product1, Product product2)
-        {
-            _productDal.Add(product1);
-            //Business Codes
-            _productDal.Update(product2);
-        }
+        //[TransactionScopeAspect]
+        //public void TransactionalOperation(Product product1, Product product2)
+        //{
+        //    _productDal.Add(product1);
+        //    //Business Codes
+        //    _productDal.Update(product2);
+        //}
 
         [FluentValidationAspect(typeof(ProductValidator))]
+        [CacheRemoveAspect(typeof(MemoryCacheManager))]
         public Product Update(Product product)
         {
             return _productDal.Update(product);
