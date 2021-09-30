@@ -18,7 +18,7 @@ namespace DevFramework.Northwind.DataAccess.Concrete.EntityFramework
             {
                 var result = from ur in context.UserRoles
                              join r in context.Roles
-                             on ur.UserId equals user.Id
+                             on ur.RoleId equals r.Id
                              where ur.UserId == user.Id
                              select new UserRoleItem { RoleName = r.Name };
                 return result.ToList();
