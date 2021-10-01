@@ -1,4 +1,5 @@
-﻿using DevFramework.Core.Aspects.Postsharp;
+﻿using AutoMapper;
+using DevFramework.Core.Aspects.Postsharp;
 using DevFramework.Core.Aspects.Postsharp.AuthhorizationAspects;
 using DevFramework.Core.Aspects.Postsharp.CacheAspect;
 using DevFramework.Core.Aspects.Postsharp.LogAspects;
@@ -7,6 +8,7 @@ using DevFramework.Core.Aspects.Postsharp.ValidationAspects;
 using DevFramework.Core.CrossCuttingConcerns.Caching.Microsoft;
 using DevFramework.Core.CrossCuttingConcerns.Logging.Log4Net.Loggers;
 using DevFramework.Core.CrossCuttingConcerns.Validation.FluentValidation;
+using DevFramework.Core.Utilities.Mappings;
 using DevFramework.Northwind.Business.Abstract;
 using DevFramework.Northwind.Business.ValidationRules.FluentValidation;
 using DevFramework.Northwind.DataAccess.Abstract;
@@ -25,10 +27,12 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
     public class ProductManager : IProductService
     {
         private IProductDal _productDal;
+        private readonly IMapper _mapper;
 
-        public ProductManager(IProductDal productDal)
+        public ProductManager(IProductDal productDal, IMapper mapper)
         {
             _productDal = productDal;
+            _mapper = mapper;
         }
 
         [FluentValidationAspect(typeof(ProductValidator))]
@@ -42,7 +46,15 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
         [SucuredOperation(Roles="Admin")]
         public List<Product> GetAll()
         {
-            return _productDal.GetList();
+            //return _productDal.GetList().Select(p => new Product { 
+            //    ProductId = p.ProductId,
+            //    CategoryId = p.CategoryId,
+            //    QuantityPerUnit = p.QuantityPerUnit,
+            //    ProductName = p.ProductName,
+            //    UnitPrice = p.UnitPrice
+            //}).ToList();
+
+            return _mapper.Map<List<Product>>(_productDal.GetList());
         }
 
         [CacheAspect(typeof(MemoryCacheManager))]
@@ -65,5 +77,7 @@ namespace DevFramework.Northwind.Business.Concrete.Managers
         {
             return _productDal.Update(product);
         }
+
+        
     }
 }
