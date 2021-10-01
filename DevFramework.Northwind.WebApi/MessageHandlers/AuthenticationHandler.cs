@@ -1,4 +1,7 @@
-﻿using System;
+﻿using DevFramework.Northwind.Business.Abstract;
+using DevFramework.Northwind.Business.DependencyResolvers.Ninject;
+using DevFramework.Northwind.Entities.Concrete;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -23,9 +26,13 @@ namespace DevFramework.Northwind.WebApi.MessageHandlers
                     string decodedString = Encoding.UTF8.GetString(data);
                     string[] tokenValues = decodedString.Split(':');
 
-                    if (tokenValues[0] == "alierk" && tokenValues[1]=="12345")
+                    IUserService userService = InstanceFactory.GetInstance<IUserService>();
+
+                    User user = userService.GetByUserNameAndPassword(tokenValues[0], tokenValues[1]);
+
+                    if (user != null)
                     {
-                        IPrincipal principal = new GenericPrincipal(new GenericIdentity(tokenValues[0]), new[] { "Admin" });
+                        IPrincipal principal = new GenericPrincipal(new GenericIdentity(tokenValues[0]), userService.GetUserRoles(user).Select(u => u.RoleName).ToArray());
                         Thread.CurrentPrincipal = principal;
                         HttpContext.Current.User = principal;
                     }
